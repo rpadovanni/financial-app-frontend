@@ -1,26 +1,50 @@
-import React, { lazy, Suspense } from 'react';
-import './App.css';
-import IUser from './interfaces/IUser';
-import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import React, { lazy, Suspense, useState } from 'react';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+
+// COMPONENTS
 import SkeletonLoading from './components/ui/skeleton-loading/SkeletonLoading';
 
-// const User = lazy(() => import('./components/user/User'));
-const UserList = lazy(() => import('./components/user/UserList'));
+// INTERFACES
+import IUser from './interfaces/IUser';
 
-// Mocking load time for User component
+// STYLES
+import { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from './ui/theme';
+import { GlobalStyles } from './ui/global';
+
+// LAZY IMPORTS
+const UserList = lazy(() => import('./components/user/UserList'));
 const User = lazy(async () => {
+    // Mocking load time for User component
     await new Promise(resolve => setTimeout(resolve, 2000));
     return import('./components/user/User');
 });
 
-function App() {
+// APP COMPONENT
+const App = () => {
+    const [theme, setTheme] = useState(lightTheme);
+
+    const onToggleTheme = () => {
+        if (theme === lightTheme) {
+            setTheme(darkTheme);
+        } else {
+            setTheme(lightTheme);
+        }
+    };
+
     const user: IUser = {
         name: 'Rafael',
     };
 
     return (
-        <Router>
-            <div className='App'>
+        <ThemeProvider theme={theme}>
+            <header>
+                <h1 style={{ color: theme.primaryColor }}>Theme</h1>
+                <h2 style={{ color: theme.secondaryColor }}>Toggle Test</h2>
+                <button onClick={onToggleTheme}>TOGGLE THEME</button>
+            </header>
+
+            <Router>
                 <header className='App-header'>
                     <nav>
                         <div>
@@ -54,9 +78,12 @@ function App() {
                         </Suspense>
                     </div>
                 </header>
-            </div>
-        </Router>
+            </Router>
+
+            {/* Global Styles */}
+            <GlobalStyles />
+        </ThemeProvider>
     );
-}
+};
 
 export default App;
