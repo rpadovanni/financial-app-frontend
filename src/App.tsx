@@ -5,12 +5,16 @@ import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import SkeletonLoading from './components/ui/skeleton-loading/SkeletonLoading';
 
 // INTERFACES
-import IUser from './interfaces/IUser';
+import { IUser } from './interfaces/IUser';
 
 // STYLES
 import { ThemeProvider } from 'styled-components';
 import { lightTheme, darkTheme } from './ui/theme';
 import { GlobalStyles } from './ui/global';
+import SignInPage from './components/pages/sign-in/SignInPage';
+
+// PROVIDERS
+import AuthProvider from './contexts/auth.context';
 
 // LAZY IMPORTS
 const UserList = lazy(() => import('./components/user/UserList'));
@@ -34,55 +38,67 @@ const App = () => {
 
     const user: IUser = {
         name: 'Rafael',
+        email: 'r.padovanni@hotmail.com',
+        userId: 1,
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <header>
-                <h1 style={{ color: theme.primaryColor }}>Theme</h1>
-                <h2 style={{ color: theme.secondaryColor }}>Toggle Test</h2>
-                <button onClick={onToggleTheme}>TOGGLE THEME</button>
-            </header>
-
-            <Router>
-                <header className='App-header'>
-                    <nav>
-                        <div>
-                            <Link to='/'>Home</Link>
-                        </div>
-
-                        <div>
-                            <Link to='/user'>User</Link>
-                        </div>
-
-                        <div>
-                            <Link to='/user-list'>User List</Link>
-                        </div>
-                    </nav>
-
-                    <br />
-
-                    <SkeletonLoading />
-
-                    <div style={{ width: '500px', height: '50px' }}>
-                        <Suspense fallback={<SkeletonLoading />}>
-                            <Switch>
-                                <Route path='/user'>
-                                    <User user={user} />
-                                </Route>
-
-                                <Route path='/user-list'>
-                                    <UserList />
-                                </Route>
-                            </Switch>
-                        </Suspense>
-                    </div>
+        <AuthProvider>
+            <ThemeProvider theme={theme}>
+                <header>
+                    <h1 style={{ color: theme.primaryColor }}>Theme</h1>
+                    <h2 style={{ color: theme.secondaryColor }}>Toggle Test</h2>
+                    <button onClick={onToggleTheme}>TOGGLE THEME</button>
                 </header>
-            </Router>
 
-            {/* Global Styles */}
-            <GlobalStyles />
-        </ThemeProvider>
+                <Router>
+                    <header className="App-header">
+                        <nav>
+                            <div>
+                                <Link to="/">Home</Link>
+                            </div>
+
+                            <div>
+                                <Link to="/sign-in">Sign In</Link>
+                            </div>
+
+                            <div>
+                                <Link to="/user">User</Link>
+                            </div>
+
+                            <div>
+                                <Link to="/user-list">User List</Link>
+                            </div>
+                        </nav>
+
+                        <br />
+
+                        <SkeletonLoading />
+
+                        <div style={{ width: '500px', height: '50px' }}>
+                            <Suspense fallback={<SkeletonLoading />}>
+                                <Switch>
+                                    <Route path="/user">
+                                        <User user={user} />
+                                    </Route>
+
+                                    <Route path="/user-list">
+                                        <UserList />
+                                    </Route>
+
+                                    <Route path="/sign-in">
+                                        <SignInPage />
+                                    </Route>
+                                </Switch>
+                            </Suspense>
+                        </div>
+                    </header>
+                </Router>
+
+                {/* Global Styles */}
+                <GlobalStyles />
+            </ThemeProvider>
+        </AuthProvider>
     );
 };
 

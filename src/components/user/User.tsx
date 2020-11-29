@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import IUser from '../../interfaces/IUser';
+import { IUser } from '../../interfaces/IUser';
 import SkeletonLoading from '../ui/skeleton-loading/SkeletonLoading';
 
 interface Props {
