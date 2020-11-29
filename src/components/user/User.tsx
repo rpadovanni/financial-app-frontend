@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import IUser from '../../interfaces/IUser';
 import SkeletonLoading from '../ui/skeleton-loading/SkeletonLoading';
 
